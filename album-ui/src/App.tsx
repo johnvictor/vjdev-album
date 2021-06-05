@@ -2,8 +2,8 @@ import * as React from "react";
 
 function App() {
   return (
-    <div>
-      Hello world
+    <div style={{textAlign: 'center'}}>
+      <h1>Oi, Shahidha</h1>
     </div>
   );
 }
