@@ -1,5 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export interface LoginState {
+  error: string;
+  user: {
+    firstName:  string;
+    lastName:  string;
+    email: string;
+    password:  string;
+  }
+}
+
 export const usersSlice = createSlice({
   name: 'users',
   initialState: {
