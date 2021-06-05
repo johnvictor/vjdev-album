@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import {LoginPage} from './pages/LoginPage';
+
 function App() {
   return (
     <div style={{textAlign: 'center'}}>
-      <h1>Oi, Shahidha</h1>
+      <LoginPage />
     </div>
   );
 }

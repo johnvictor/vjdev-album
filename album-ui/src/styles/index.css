@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: NotoSans;
+    font-weight: 400;
+    src: url(../assets/fonts/NotoSansJP-Regular.otf) format("otf");
+  }
+
+  * {
+    @apply tracking-wider;
+  }
+
+  input {
+    @apply px-2;
+  }
+}
