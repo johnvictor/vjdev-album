@@ -1,19 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { registerUserEffect } from '../effects/usersEffect';
 
-export interface LoginState {
-  error: string;
-  user: {
-    firstName:  string;
-    lastName:  string;
-    email: string;
-    password:  string;
-  }
+export interface IUser {
+  firstName:  string;
+  lastName:  string;
+  email: string;
+  password:  string;
+  rePassword?: string;
+}
+
+export interface IRegisterState {
+  error: string | null;
+  user: IUser
 }
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState: {
-    error: '',
+    error: null,
     user: {
         firstName: '',
         lastName: '',
@@ -22,24 +26,31 @@ export const usersSlice = createSlice({
     }
   },
   reducers: {
-    registerUser: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-    //   state.value += 1
+    registerUser: (state, action: PayloadAction<IUser>) => {
+      console.log("Registedring user with state");
+      console.log(state);
+      console.log(action.payload);
     },
-    registerUserSuccess: (state) => {
+    registerUserSuccess: (state: IRegisterState, action: PayloadAction<IRegisterState>) => {
       state.user.firstName = 'John';
       state.user.password = '';
     },
-    registerUserFailed: (state, action) => {
+    registerUserFailed: (state: IRegisterState, action) => {
         state.error = 'user already exists';
     },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(registerUserEffect.fulfilled, (state: IRegisterState, action) => {
+      state.error = null
+    });
+    builder.addCase(registerUserEffect.rejected, (state: IRegisterState, action: any) => {
+      state.error = action.payload.error;
+    });
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { registerUser, registerUserSuccess, registerUserFailed } = usersSlice.actions
+export const { registerUser, registerUserSuccess, registerUserFailed } = usersSlice.actions;
 
 export default usersSlice.reducer;

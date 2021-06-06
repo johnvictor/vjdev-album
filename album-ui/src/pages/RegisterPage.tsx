@@ -1,19 +1,23 @@
 import registration from "../assets/img/registration.png";
-import { useSelector } from "react-redux";
-import { LoginState } from "../store/reducers/users";
+import { IRegisterState, IUser } from "../store/reducers/users";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { registerUserEffect } from "../store/effects/usersEffect";
+import { useHistory } from "react-router-dom";
 
-let counter = 0;
-
-export const LoginPage = () => {
+export const RegisterPage = () => {
+  const history = useHistory();
   const { register, handleSubmit, watch, formState } = useForm();
+  const dispatch = useAppDispatch();
   const password = useRef({});
   password.current = watch("password", "");
+  const userState: IRegisterState = useAppSelector((state) => state).user;
 
-  const submitRegistrationForm = (event: React.SyntheticEvent) => {
-    console.log(formState);
-    console.log(event);
+  const submitRegistrationForm = async (event: IUser) => {
+    delete event.rePassword;
+    let result: any = await dispatch(registerUserEffect(event));
+    if (!result.error) history.push("/dashboard");
   };
 
   const isPasswordSame = (data: string) => {
@@ -21,7 +25,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-2">
+    <div className="min-h-screen grid grid-cols-2 bg-blue-800">
       <div className="bg-pink-300 rounded-md shadow-2xl m-4 flex justify-center items-center">
         <img className="h-2/4" src={registration} alt="art" />
       </div>
@@ -64,18 +68,21 @@ export const LoginPage = () => {
             <input
               className="rounded-md w-full h-8"
               {...register("email", { required: true })}
+              autoComplete="username"
             />
             <div className="text-red-500 h-4 mb-4">
               {formState.errors.email?.type === "required" &&
                 "Email is required"}
+              {userState.error}
             </div>
 
             <label htmlFor="password" className="block text-green-100">
               Password
             </label>
             <input
-              {...register("password", { required: true, minLength: 6 })}
+              {...register("password", { required: true, minLength: 1 })}
               type="password"
+              autoComplete="new-password"
               className="rounded-md w-full h-8"
             />
             <div className="text-red-500 h-4 mb-4">
@@ -91,10 +98,11 @@ export const LoginPage = () => {
             <input
               {...register("rePassword", {
                 required: true,
-                minLength: 6,
+                minLength: 1,
                 validate: isPasswordSame,
               })}
               type="password"
+              autoComplete="new-password"
               className="rounded-md w-full h-8"
             />
             <div className="text-red-500 h-4 mb-4">
@@ -107,7 +115,9 @@ export const LoginPage = () => {
             </div>
 
             <button
-              className="float-right bg-transparent hover:bg-blue-500 text-blue-500 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="float-right bg-transparent hover:bg-blue-500 text-blue-500 
+                        font-semibold hover:text-white py-2 px-4 border border-blue-500 
+                        hover:border-transparent rounded"
               type="submit"
             >
               Register
