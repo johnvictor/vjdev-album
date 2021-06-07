@@ -2,6 +2,7 @@ import registration from "../assets/img/registration.png";
 import { IRegisterState, IUser } from "../store/reducers/users";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { registerUserEffect } from "../store/effects/usersEffect";
 import { useHistory } from "react-router-dom";
@@ -113,6 +114,13 @@ export const RegisterPage = () => {
               {formState.errors.rePassword?.type === "validate" &&
                 formState.errors.rePassword?.message}
             </div>
+
+            <Link
+              to="/login"
+              className="cursor-pointer text-green-300 hover:text-white duration-500"
+            >
+              Login
+            </Link>
 
             <button
               className="float-right bg-transparent hover:bg-blue-500 text-blue-500 
